@@ -1,4 +1,5 @@
 #include "quick.h"
+#include "merge.h"
 #include <random>
 #include <iostream>
 #include <cinttypes>
@@ -29,11 +30,11 @@ void printVector(std::vector<uint32_t> &A) {
 
 int main() {
     uint32_t lo = 0;
-    uint32_t hi = 50;
-    uint32_t len = 50;
+    uint32_t hi = 1000;
+    uint32_t len = 20;
     std::vector<uint32_t> A = random_vector(lo, hi, len);
     printVector(A);
-    quick_sort(A);
+    merge_sort(A);
     printVector(A);
     return 0;
 }
