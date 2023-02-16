@@ -1,9 +1,9 @@
 CC = clang++
-CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror
+CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -pthread
 LFLAGS = 
 
 EXEC = sort
-OBJECTS = sort.o quick.o merge.o
+OBJECTS = sort.o merge.o
 
 $(EXEC): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
