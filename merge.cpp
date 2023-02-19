@@ -4,10 +4,11 @@
 #include <vector>
 #include <cinttypes>
 #include <thread>
+#include <iomanip>
 
 #define MAX(a, b) (a > b ? a : b)
 #define INF -1
-#define NUM_THREADS 4
+#define NUM_CORES 8
 
 void MergeSorter::Merge(std::vector<uint32_t>& A, uint32_t p, uint32_t q, uint32_t r) {
     uint32_t left_size = q - p + 1;
@@ -60,13 +61,18 @@ void MergeSorter::MergeSort(std::vector<uint32_t>& A) {
 
 void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A) {
     std::vector<std::thread> threads {};
+    std::vector<std::pair<uint32_t, uint32_t>> indices;
     
     void (*pf)(std::vector<uint32_t>&, uint32_t, uint32_t) = MergeSort;
     
-    uint32_t elements_per_thread = A.size() / NUM_THREADS;
-    for (uint32_t t = 0; t < NUM_THREADS; t += 1) {
+    uint32_t elements_per_thread = A.size() / NUM_CORES;
+    for (uint32_t t = 0; t < NUM_CORES; t += 1) {
         uint32_t p = (t * elements_per_thread) + 1;
         uint32_t r = ((t + 1) * (elements_per_thread));
+        if (t + 1 == NUM_CORES) r += A.size() % NUM_CORES;
+        
+        indices.push_back(std::pair(p, r));
+
         std::thread thread (pf, std::ref(A), p, r);
         threads.push_back(std::move(thread));
     }
@@ -75,19 +81,35 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A) {
         t.join();
     }
 
-    uint32_t lo = 1;
-    uint32_t mid = elements_per_thread;
-    uint32_t max = mid * 2;
+    uint32_t lo, mid, hi;
+    uint32_t step = 1;
+    uint32_t num_lists = NUM_CORES;
     
-    Merge(A, lo, mid, max);
+    while (step < num_lists) {
+        for (uint32_t i = 0; i < num_lists - step; i += step * 2) {
+            lo = indices[i].first;
+            hi = indices[i + step].second;
+            mid = indices[i].second;
+
+            MergeSorter::Merge(A, lo, mid, hi);
+
+            indices[i].second = hi;
+        }
+        step *= 2;
+    }
     
-    lo = max + 1;
-    mid += max;
-    max = elements_per_thread * 4;
-
-    Merge(A, lo, mid, max);
-
-    Merge(A, 1, max / 2, max);
-
     return;
+}
+
+void MergeSorter::Display(std::vector<uint32_t>& A, uint32_t n) {
+    if (n > A.size()) {
+        n = A.size();
+    }
+    for (uint32_t i = 0; i < n; i += 1) {
+        if (i != 0 && (i % 5) == 0) {
+            std::cout << "\n";
+        }
+        std::cout << std::setw(13) << A[i];
+    }
+    std::cout << "\n";
 }
