@@ -1,3 +1,3 @@
-# Multi Threaded Sorting
+# Multithreaded Merge Sort
 
-Sorting algorithms utilizing concurrency programming.
+Merge Sorter utilizing concurrency programming.
