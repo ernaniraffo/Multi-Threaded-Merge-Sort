@@ -110,6 +110,9 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
 }
 
 void MergeSorter::Display(std::vector<uint32_t>& A, uint32_t n) {
+    if (n == 0) {
+        return;
+    }
     if (n > A.size()) {
         n = A.size();
     }
