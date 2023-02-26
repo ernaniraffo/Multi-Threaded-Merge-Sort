@@ -5,10 +5,17 @@
 #include <cinttypes>
 #include <thread>
 #include <iomanip>
+#include <random>
 
 #define MAX(a, b) (a > b ? a : b)
 #define INF -1
-#define NUM_CORES 8
+
+void MergeSorter::RandomArray(std::vector<uint32_t>& A, std::mt19937& gen, std::uniform_int_distribution<unsigned long>& distrib) {
+    for (uint32_t i = 0; i < A.size(); i += 1) {
+            A[i] = distrib(gen);
+    }
+    return;
+}
 
 void MergeSorter::Merge(std::vector<uint32_t>& A, uint32_t p, uint32_t q, uint32_t r) {
     uint32_t left_size = q - p + 1;
@@ -52,6 +59,7 @@ void MergeSorter::MergeSort(std::vector<uint32_t>& A, uint32_t p, uint32_t r) {
         MergeSort(A, q + 1, r);
         MergeSorter::Merge(A, p, q, r);
     }
+    return;
 }
 
 void MergeSorter::MergeSort(std::vector<uint32_t>& A) {
@@ -59,17 +67,17 @@ void MergeSorter::MergeSort(std::vector<uint32_t>& A) {
     return;
 }
 
-void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A) {
+void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
     std::vector<std::thread> threads {};
     std::vector<std::pair<uint32_t, uint32_t>> indices;
     
     void (*pf)(std::vector<uint32_t>&, uint32_t, uint32_t) = MergeSort;
     
-    uint32_t elements_per_thread = A.size() / NUM_CORES;
-    for (uint32_t t = 0; t < NUM_CORES; t += 1) {
+    uint32_t elements_per_thread = A.size() / cores;
+    for (uint32_t t = 0; t < cores; t += 1) {
         uint32_t p = (t * elements_per_thread) + 1;
         uint32_t r = ((t + 1) * (elements_per_thread));
-        if (t + 1 == NUM_CORES) r += A.size() % NUM_CORES;
+        if (t + 1 == cores) r += A.size() % cores;
         
         indices.push_back(std::pair(p, r));
 
@@ -83,7 +91,7 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A) {
 
     uint32_t lo, mid, hi;
     uint32_t step = 1;
-    uint32_t num_lists = NUM_CORES;
+    uint32_t num_lists = cores;
     
     while (step < num_lists) {
         for (uint32_t i = 0; i < num_lists - step; i += step * 2) {
@@ -112,4 +120,5 @@ void MergeSorter::Display(std::vector<uint32_t>& A, uint32_t n) {
         std::cout << std::setw(13) << A[i];
     }
     std::cout << "\n";
+    return;
 }
