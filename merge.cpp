@@ -70,14 +70,18 @@ void MergeSorter::MergeSort(std::vector<uint32_t>& A) {
 void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
     std::vector<std::thread> threads {};
     std::vector<std::pair<uint32_t, uint32_t>> indices;
+    uint32_t elements_per_thread = A.size() / cores;
     
     void (*pf)(std::vector<uint32_t>&, uint32_t, uint32_t) = MergeSort;
     
-    uint32_t elements_per_thread = A.size() / cores;
+    uint32_t p, r;
     for (uint32_t t = 0; t < cores; t += 1) {
-        uint32_t p = (t * elements_per_thread) + 1;
-        uint32_t r = ((t + 1) * (elements_per_thread));
-        if (t + 1 == cores) r += A.size() % cores;
+        p = (t * elements_per_thread) + 1;
+        r = ((t + 1) * (elements_per_thread));
+        
+        if (t + 1 == cores) {
+            r += A.size() % cores;
+        }
         
         indices.push_back(std::pair(p, r));
 
