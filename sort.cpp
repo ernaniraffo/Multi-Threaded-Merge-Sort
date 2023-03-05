@@ -11,7 +11,7 @@
 #include <thread>
 #include <stdexcept>
 
-#define OPTIONS "l:h:s:n:c:mp"
+#define OPTIONS "l:h:s:n:c:p"
 
 int main(int argc, char** argv) {
     uint32_t lo = 0;
