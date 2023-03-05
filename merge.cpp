@@ -76,8 +76,9 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
     
     uint32_t p, r;
     for (uint32_t t = 0; t < cores; t += 1) {
-        p = (t * elements_per_thread) + 1;
-        r = ((t + 1) * (elements_per_thread));
+        
+        p = t * elements_per_thread + 1;
+        r = (t + 1) * elements_per_thread;
         
         if (t + 1 == cores) {
             r += A.size() % cores;
