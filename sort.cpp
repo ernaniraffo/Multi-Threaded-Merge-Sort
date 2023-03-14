@@ -13,6 +13,8 @@
 
 #define OPTIONS "l:h:s:n:c:p"
 
+std::string usage();
+
 int main(int argc, char** argv) {
     uint32_t lo = 0;
     uint32_t hi = UINT32_MAX;
@@ -24,13 +26,13 @@ int main(int argc, char** argv) {
     int opt;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-            case 'l': lo    = strtoul(optarg, NULL, 10); break;
-            case 'h': hi    = strtoul(optarg, NULL, 10); break;
-            case 's': size  = strtoul(optarg, NULL, 10); break;
-            case 'n': n     = strtoul(optarg, NULL, 10); break;
+            case 'l': lo = strtoul(optarg, NULL, 10); break;
+            case 'h': hi = strtoul(optarg, NULL, 10); break;
+            case 's': size = strtoul(optarg, NULL, 10); break;
+            case 'n': n = strtoul(optarg, NULL, 10); break;
             case 'c': cores = strtoul(optarg, NULL, 10); break;
             case 'p': parallel = true; break;
-            default: break;
+            default: std::cerr << usage(); return EXIT_FAILURE;
         }
     }
 
@@ -68,4 +70,19 @@ int main(int argc, char** argv) {
     MergeSorter::Display(A, n);
 
     return EXIT_SUCCESS;
+}
+
+std::string usage() {
+    return std::string {}
+    + "Synopsis\n"
+    + "    A Merge Sorter utilizing concurrency programming.\n"
+    + "Usage\n"
+    + "    ./sort [-l low] [-h high] [-s size] [-n elements] [-c cores] [-p]\n"
+    + "Options\n"
+    + "    -l low        lower bound for number generation. Default: 0\n"
+    + "    -s size       higher bound for number generation. Default: UINT32_MAX\n"
+    + "    -n elements   elements to be displayed once sorted. Default: 100\n"
+    + "    -c cores      number of cores for multithreading. Default: 1\n"
+    + "    -p            enables parallel sorting\n"
+    ;
 }

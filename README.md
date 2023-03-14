@@ -10,7 +10,7 @@ To build the executable `sort` run `make` or `make sort` in your terminal.
 
 `$ ./sort [-l low] [-h high] [-s size] [-n elements] [-c cores] [-p]`
 
-`-l low` and `-h high` specify the range `[low, high]` in which integers are randomly generated. Default: `[0, 100]`.
+`-l low` and `-h high` specify the range `[low, high]` in which integers are randomly generated. Default: `[0, UINT32_MAX]`.
 
 `-s size` specifies the size of the array to be sorted. Default: `100`
 
