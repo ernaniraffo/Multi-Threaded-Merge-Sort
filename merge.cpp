@@ -8,22 +8,23 @@
 #include <random>
 
 #define MAX(a, b) (a > b ? a : b)
-#define INF -1
+#define INF       -1
 
-void MergeSorter::RandomArray(std::vector<uint32_t>& A, std::mt19937& gen, std::uniform_int_distribution<unsigned long>& distrib) {
+void MergeSorter::RandomArray(std::vector<uint32_t> &A, std::mt19937 &gen,
+    std::uniform_int_distribution<unsigned long> &distrib) {
     for (uint32_t i = 0; i < A.size(); i += 1) {
-            A[i] = distrib(gen);
+        A[i] = distrib(gen);
     }
     return;
 }
 
-void MergeSorter::Merge(std::vector<uint32_t>& A, uint32_t p, uint32_t q, uint32_t r) {
+void MergeSorter::Merge(std::vector<uint32_t> &A, uint32_t p, uint32_t q, uint32_t r) {
     uint32_t left_size = q - p + 1;
     uint32_t right_size = r - q;
-    
-    std::vector<uint32_t> L (left_size + 1);
-    std::vector<uint32_t> R (right_size + 1);
-    
+
+    std::vector<uint32_t> L(left_size + 1);
+    std::vector<uint32_t> R(right_size + 1);
+
     for (uint32_t i = 1; i <= left_size; i += 1) {
         L[i - 1] = A[p + i - 2];
     }
@@ -51,7 +52,7 @@ void MergeSorter::Merge(std::vector<uint32_t>& A, uint32_t p, uint32_t q, uint32
     return;
 }
 
-void MergeSorter::MergeSort(std::vector<uint32_t>& A, uint32_t p, uint32_t r) {
+void MergeSorter::MergeSort(std::vector<uint32_t> &A, uint32_t p, uint32_t r) {
     uint32_t q;
     if (p < r) {
         q = (p + r) / 2;
@@ -62,31 +63,31 @@ void MergeSorter::MergeSort(std::vector<uint32_t>& A, uint32_t p, uint32_t r) {
     return;
 }
 
-void MergeSorter::MergeSort(std::vector<uint32_t>& A) {
+void MergeSorter::MergeSort(std::vector<uint32_t> &A) {
     MergeSort(A, 1, A.size());
     return;
 }
 
-void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
+void MergeSorter::ParallelMergeSort(std::vector<uint32_t> &A, uint32_t cores) {
     std::vector<std::thread> threads {};
     std::vector<std::pair<uint32_t, uint32_t>> indices;
     uint32_t elements_per_thread = A.size() / cores;
-    
-    void (*pf)(std::vector<uint32_t>&, uint32_t, uint32_t) = MergeSort;
-    
+
+    void (*pf)(std::vector<uint32_t> &, uint32_t, uint32_t) = MergeSort;
+
     uint32_t p, r;
     for (uint32_t t = 0; t < cores; t += 1) {
-        
+
         p = t * elements_per_thread + 1;
         r = (t + 1) * elements_per_thread;
-        
+
         if (t + 1 == cores) {
             r += A.size() % cores;
         }
-        
+
         indices.push_back(std::pair(p, r));
 
-        std::thread thread (pf, std::ref(A), p, r);
+        std::thread thread(pf, std::ref(A), p, r);
         threads.push_back(std::move(thread));
     }
 
@@ -97,7 +98,7 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
     uint32_t lo, mid, hi;
     uint32_t step = 1;
     uint32_t num_lists = cores;
-    
+
     while (step < num_lists) {
         for (uint32_t i = 0; i < num_lists - step; i += step * 2) {
             lo = indices[i].first;
@@ -110,11 +111,11 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t>& A, uint32_t cores) {
         }
         step *= 2;
     }
-    
+
     return;
 }
 
-void MergeSorter::Display(std::vector<uint32_t>& A, uint32_t n) {
+void MergeSorter::Display(std::vector<uint32_t> &A, uint32_t n) {
     if (n == 0) {
         return;
     }

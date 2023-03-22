@@ -16,3 +16,6 @@ clean: tidy
 
 tidy:
 	rm -f $(OBJECTS)
+
+format:
+	clang-format -i -style=file *.cpp *.h
