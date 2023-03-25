@@ -47,8 +47,7 @@ int main(int argc, char **argv) {
     std::vector<uint32_t> A(size);
 
     if (parallel) {
-
-        MergeSorter::RandomArray(A, gen, distrib);
+        MergeSorter::RandomArray(A);
 
         auto start = std::chrono::steady_clock::now();
         MergeSorter::ParallelMergeSort(A, cores);
@@ -60,7 +59,7 @@ int main(int argc, char **argv) {
         MergeSorter::Display(A, n);
     }
 
-    MergeSorter::RandomArray(A, gen, distrib);
+    MergeSorter::RandomArray(A);
 
     auto start = std::chrono::steady_clock::now();
     MergeSorter::MergeSort(A);
