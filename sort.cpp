@@ -61,8 +61,8 @@ int main(int argc, char **argv) {
         MergeSorter::OptimizedParallelMergeSort(A, cores);
         end = std::chrono::steady_clock::now();
         elapsed_seconds = end - start;
-        std::cout << "Optimized Parallel Merge Sort, " << size << " elements, " << elapsed_seconds.count()
-                  << " seconds\n";
+        std::cout << "Optimized Parallel Merge Sort, " << size << " elements, "
+                  << elapsed_seconds.count() << " seconds\n";
         MergeSorter::Display(A, n);
     }
 
