@@ -3,7 +3,7 @@ CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -pthread
 LFLAGS = 
 
 EXEC = sort
-OBJECTS = sort.o merge.o
+OBJECTS = sort.o merge.o threads.o
 
 $(EXEC): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
