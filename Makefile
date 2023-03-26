@@ -1,5 +1,5 @@
 CC = clang++
-CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -pthread
+CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -fsanitize=address -pthread
 LFLAGS = 
 
 EXEC = sort
