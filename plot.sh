@@ -33,4 +33,3 @@ plot "/tmp/Parallel.dat" using 1:2 title 'Parallel' with lines , \
 EOF
 echo "Done."
 echo "Opening plot..."
-open parallel-vs-sequential.pdf
