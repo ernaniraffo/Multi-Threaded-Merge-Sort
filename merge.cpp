@@ -15,6 +15,7 @@ std::mt19937 gen;
 std::uniform_int_distribution<unsigned long> distrib;
 
 void MergeSorter::RandomArray(std::vector<uint32_t> &A) {
+    gen.seed(std::mt19937::default_seed);
     for (uint32_t i = 0; i < A.size(); i += 1) {
         A[i] = distrib(gen);
     }
