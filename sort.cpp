@@ -48,24 +48,29 @@ int main(int argc, char **argv) {
 
     if (parallel) {
         MergeSorter::RandomArray(A);
-
         auto start = std::chrono::steady_clock::now();
         MergeSorter::ParallelMergeSort(A, cores);
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed_seconds = end - start;
-
         std::cout << "Parallel Merge Sort, " << size << " elements, " << elapsed_seconds.count()
+                  << " seconds\n";
+        MergeSorter::Display(A, n);
+
+        MergeSorter::RandomArray(A);
+        start = std::chrono::steady_clock::now();
+        MergeSorter::OptimizedParallelMergeSort(A, cores);
+        end = std::chrono::steady_clock::now();
+        elapsed_seconds = end - start;
+        std::cout << "Optimized Parallel Merge Sort, " << size << " elements, " << elapsed_seconds.count()
                   << " seconds\n";
         MergeSorter::Display(A, n);
     }
 
     MergeSorter::RandomArray(A);
-
     auto start = std::chrono::steady_clock::now();
     MergeSorter::MergeSort(A);
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-
     std::cout << "Merge Sort, " << size << " elements, " << elapsed_seconds.count() << " seconds\n";
     MergeSorter::Display(A, n);
 
