@@ -10,6 +10,7 @@
 #include <chrono>
 #include <thread>
 #include <stdexcept>
+#include <algorithm>
 
 #define OPTIONS "l:h:s:n:c:p"
 
@@ -55,6 +56,7 @@ int main(int argc, char **argv) {
         std::cout << "Parallel Merge Sort, " << size << " elements, " << elapsed_seconds.count()
                   << " seconds\n";
         MergeSorter::Display(A, n);
+        assert(is_sorted(A.begin(), A.end()));
 
         MergeSorter::RandomArray(A);
         start = std::chrono::steady_clock::now();
@@ -64,6 +66,17 @@ int main(int argc, char **argv) {
         std::cout << "Optimized Parallel Merge Sort, " << size << " elements, "
                   << elapsed_seconds.count() << " seconds\n";
         MergeSorter::Display(A, n);
+        assert(is_sorted(A.begin(), A.end()));
+
+        MergeSorter::RandomArray(A);
+        start = std::chrono::steady_clock::now();
+        MergeSorter::OptimizedParallelMergeSortV2(A, cores);
+        end = std::chrono::steady_clock::now();
+        elapsed_seconds = end - start;
+        std::cout << "Optimized Parallel Merge Sort V2, " << size << " elements, "
+                  << elapsed_seconds.count() << " seconds\n";
+        MergeSorter::Display(A, n);
+        assert(is_sorted(A.begin(), A.end()));
     }
 
     MergeSorter::RandomArray(A);

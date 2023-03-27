@@ -16,5 +16,6 @@ public:
     static void MergeSort(std::vector<uint32_t> &, uint32_t, uint32_t);
     static void ParallelMergeSort(std::vector<uint32_t> &, uint32_t);
     static void OptimizedParallelMergeSort(std::vector<uint32_t> &, uint32_t);
+    static void OptimizedParallelMergeSortV2(std::vector<uint32_t> &, uint32_t);
     static void Display(std::vector<uint32_t> &, uint32_t);
 };
