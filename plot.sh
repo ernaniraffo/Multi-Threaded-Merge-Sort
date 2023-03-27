@@ -26,7 +26,7 @@ set ylabel "Time (seconds)"
 set logscale
 set xtics nologscale
 set ytics nologscale
-set yrange[:100]
+set yrange[:10]
 set output "time.tex"
 plot "/tmp/Parallel.dat" using 1:2 title 'Parallel' with lines , \
 "/tmp/Optimized.dat" using 1:2 title 'Optimized Parallel' with lines , \
