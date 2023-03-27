@@ -1,5 +1,5 @@
 #!/bin/bash
 
 pdflatex writeup.tex >/dev/null
-rm time-* *.log *.aux
+rm time-eps-converted-to.pdf *.log *.aux
 open writeup.pdf
