@@ -17,5 +17,14 @@ clean: tidy
 tidy:
 	rm -f $(OBJECTS)
 
+writeup: writeup.tex
+	pdflatex writeup
+
+cleantex: tidytex
+	rm -f writeup.pdf
+
+tidytex:
+	rm time-eps-converted-to.pdf *.log *.aux
+
 format:
 	clang-format -i -style=file *.cpp *.h
