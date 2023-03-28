@@ -121,7 +121,8 @@ void MergeSorter::MergeSort(std::vector<uint32_t> &A) {
     return;
 }
 
-void MergeKLists(std::vector<uint32_t> &A, uint32_t k, std::vector<std::pair<uint32_t, uint32_t>> &indices) {
+void MergeKLists(
+    std::vector<uint32_t> &A, uint32_t k, std::vector<std::pair<uint32_t, uint32_t>> &indices) {
     uint32_t lo, mid, hi;
     uint32_t step = 1;
 
