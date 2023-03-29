@@ -22,4 +22,4 @@ To build the executable `sort` run `make` or `make sort` in your terminal.
 
 ## Benchmarks
 
-Benchmarks with graphs are included in `writeup.pdf`.
+Benchmarks with graphs are included in `WRITEUP.pdf`.
