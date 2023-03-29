@@ -1,4 +1,4 @@
-# Multithreaded Merge Sort
+# Multi-Threaded Merge Sort
 
 A Merge Sorter utilizing concurrency programming. The elements in the array to be sorted are initially randomly generated using the Mersenne Twister algorithm.
 
