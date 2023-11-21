@@ -13,40 +13,18 @@
 std::mt19937 gen;
 std::uniform_int_distribution<unsigned long> distrib;
 
-void JoinThreads(std::vector<std::thread> &threads) {
+void join_threads(std::vector<std::thread> &threads) {
     for (auto &t : threads) {
         t.join();
     }
     return;
 }
 
-void StartThreads(std::vector<uint32_t> &A, uint32_t cores, std::vector<std::thread> &threads,
-    std::vector<std::pair<uint32_t, uint32_t>> &indices) {
-    uint32_t elements_per_thread = A.size() / cores;
-    void (*pf)(std::vector<uint32_t> &, uint32_t, uint32_t) = MergeSorter::MergeSort;
-
-    uint32_t lo, hi;
-    lo = hi = 0;
-    for (uint32_t t = 0; t < cores; t += 1) {
-        lo = hi + 1;
-        hi = lo + elements_per_thread - 1;
-        if (t + 1 == cores) {
-            hi += A.size() % cores;
-        }
-        indices.push_back(std::pair(lo, hi));
-
-        std::thread thread(pf, std::ref(A), lo, hi);
-        threads.push_back(std::move(thread));
-    }
-    return;
-}
-
-void StartThreadsV2(std::vector<uint32_t> &A, uint32_t cores, std::vector<std::thread> &threads,
+void start_threads(std::vector<uint32_t> &A, uint32_t cores, std::vector<std::thread> &threads,
     std::vector<std::pair<uint32_t, uint32_t>> &indices) {
     uint32_t elements_per_thread = A.size() / cores;
     uint32_t remainder = A.size() % cores;
-    void (*pf)(std::vector<uint32_t> &, uint32_t, uint32_t) = MergeSorter::MergeSort;
-
+    void (*pf)(std::vector<uint32_t> &, uint32_t, uint32_t) = MergeSorter::MergeSort; 
     uint32_t lo, hi;
     lo = hi = 0;
     for (uint32_t t = 0; t < cores; t += 1) {
@@ -59,6 +37,29 @@ void StartThreadsV2(std::vector<uint32_t> &A, uint32_t cores, std::vector<std::t
 
         std::thread thread(pf, std::ref(A), lo, hi);
         threads.push_back(std::move(thread));
+    }
+    return;
+}
+
+void threaded_merge_k_lists(std::vector<uint32_t> &A, uint32_t k, std::vector<std::thread> &threads,
+    std::vector<std::pair<uint32_t, uint32_t>> &indices) {
+    uint32_t lo, mid, hi;
+    uint32_t step = 1;
+
+    void (*pf2)(std::vector<uint32_t> &, uint32_t, uint32_t, uint32_t) = MergeSorter::Merge;
+
+    while (step < k) {
+        threads.clear();
+        for (uint32_t i = 0; i < k - step; i += step * 2) {
+            lo = indices[i].first;
+            hi = indices[i + step].second;
+            mid = indices[i].second;
+            std::thread thread(pf2, std::ref(A), lo, mid, hi);
+            threads.push_back(std::move(thread));
+            indices[i].second = hi;
+        }
+        join_threads(threads);
+        step *= 2;
     }
     return;
 }
@@ -121,71 +122,12 @@ void MergeSorter::MergeSort(std::vector<uint32_t> &A) {
     return;
 }
 
-void MergeKLists(
-    std::vector<uint32_t> &A, uint32_t k, std::vector<std::pair<uint32_t, uint32_t>> &indices) {
-    uint32_t lo, mid, hi;
-    uint32_t step = 1;
-
-    while (step < k) {
-        for (uint32_t i = 0; i < k - step; i += step * 2) {
-            lo = indices[i].first;
-            hi = indices[i + step].second;
-            mid = indices[i].second;
-            MergeSorter::Merge(A, lo, mid, hi);
-            indices[i].second = hi;
-        }
-        step *= 2;
-    }
-    return;
-}
-
-void ThreadedMergeKLists(std::vector<uint32_t> &A, uint32_t k, std::vector<std::thread> &threads,
-    std::vector<std::pair<uint32_t, uint32_t>> &indices) {
-    uint32_t lo, mid, hi;
-    uint32_t step = 1;
-
-    void (*pf2)(std::vector<uint32_t> &, uint32_t, uint32_t, uint32_t) = MergeSorter::Merge;
-
-    while (step < k) {
-        threads.clear();
-        for (uint32_t i = 0; i < k - step; i += step * 2) {
-            lo = indices[i].first;
-            hi = indices[i + step].second;
-            mid = indices[i].second;
-            std::thread thread(pf2, std::ref(A), lo, mid, hi);
-            threads.push_back(std::move(thread));
-            indices[i].second = hi;
-        }
-        JoinThreads(threads);
-        step *= 2;
-    }
-    return;
-}
-
 void MergeSorter::ParallelMergeSort(std::vector<uint32_t> &A, uint32_t cores) {
     std::vector<std::thread> threads {};
     std::vector<std::pair<uint32_t, uint32_t>> indices;
-    StartThreads(A, cores, threads, indices);
-    JoinThreads(threads);
-    MergeKLists(A, cores, indices);
-    return;
-}
-
-void MergeSorter::OptimizedParallelMergeSort(std::vector<uint32_t> &A, uint32_t cores) {
-    std::vector<std::thread> threads {};
-    std::vector<std::pair<uint32_t, uint32_t>> indices;
-    StartThreads(A, cores, threads, indices);
-    JoinThreads(threads);
-    ThreadedMergeKLists(A, cores, threads, indices);
-    return;
-}
-
-void MergeSorter::OptimizedParallelMergeSortV2(std::vector<uint32_t> &A, uint32_t cores) {
-    std::vector<std::thread> threads {};
-    std::vector<std::pair<uint32_t, uint32_t>> indices;
-    StartThreadsV2(A, cores, threads, indices);
-    JoinThreads(threads);
-    ThreadedMergeKLists(A, cores, threads, indices);
+    start_threads(A, cores, threads, indices);
+    join_threads(threads);
+	threaded_merge_k_lists(A, cores, threads, indices);
     return;
 }
 
