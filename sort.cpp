@@ -11,6 +11,8 @@
 #include <thread>
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
+#include <assert.h>
 
 #define OPTIONS "l:h:s:n:c:p"
 
@@ -47,55 +49,35 @@ int main(int argc, char **argv) {
 
     std::vector<uint32_t> A(size);
 
-    if (parallel) {
+    auto sort = [&](bool parallel) {
         MergeSorter::RandomArray(A);
+    
         auto start = std::chrono::steady_clock::now();
-        MergeSorter::ParallelMergeSort(A, cores);
+        parallel ? MergeSorter::ParallelMergeSort(A, cores) : MergeSorter::MergeSort(A);
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed_seconds = end - start;
-        std::cout << "Parallel Merge Sort, " << size << " elements, " << elapsed_seconds.count()
-                  << " seconds\n";
-        MergeSorter::Display(A, n);
-        assert(is_sorted(A.begin(), A.end()));
 
-        MergeSorter::RandomArray(A);
-        start = std::chrono::steady_clock::now();
-        MergeSorter::OptimizedParallelMergeSort(A, cores);
-        end = std::chrono::steady_clock::now();
-        elapsed_seconds = end - start;
-        std::cout << "Optimized Parallel Merge Sort, " << size << " elements, "
-                  << elapsed_seconds.count() << " seconds\n";
+        std::string type = parallel ? "Parallel Merge Sort" : "Merge Sort";
+        std::cout << type << ", " << A.size() << " elements, " << elapsed_seconds.count() << " seconds\n";
         MergeSorter::Display(A, n);
-        assert(is_sorted(A.begin(), A.end()));
+    };
 
-        MergeSorter::RandomArray(A);
-        start = std::chrono::steady_clock::now();
-        MergeSorter::OptimizedParallelMergeSortV2(A, cores);
-        end = std::chrono::steady_clock::now();
-        elapsed_seconds = end - start;
-        std::cout << "Optimized Parallel Merge Sort V2, " << size << " elements, "
-                  << elapsed_seconds.count() << " seconds\n";
-        MergeSorter::Display(A, n);
-        assert(is_sorted(A.begin(), A.end()));
-    }
-
-    MergeSorter::RandomArray(A);
-    auto start = std::chrono::steady_clock::now();
-    MergeSorter::MergeSort(A);
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "Merge Sort, " << size << " elements, " << elapsed_seconds.count() << " seconds\n";
-    MergeSorter::Display(A, n);
+    sort(parallel);
 
     return EXIT_SUCCESS;
 }
 
 std::string usage() {
-    return std::string {} + "Synopsis\n" + "    A Merge Sorter utilizing concurrency programming.\n"
-           + "Usage\n" + "    ./sort [-l low] [-h high] [-s size] [-n elements] [-c cores] [-p]\n"
-           + "Options\n" + "    -l low        lower bound for number generation. Default: 0\n"
-           + "    -s size       higher bound for number generation. Default: UINT32_MAX\n"
-           + "    -n elements   elements to be displayed once sorted. Default: 100\n"
-           + "    -c cores      number of cores for multithreading. Default: 1\n"
-           + "    -p            enables parallel sorting\n";
+    return std::string {} 
+            + "Synopsis\n" 
+            + "\tA Merge Sorter utilizing concurrency programming.\n"
+            + "Usage\n" 
+            + "\t./sort [-l low] [-h high] [-s size] [-n elements] [-c cores] [-p]\n"
+            + "Options\n" 
+            + "\t-l low        lower bound for number generation. Default: 0\n"
+            + "\t-h high       higher bound for number generation. Default: UINT32_MAX\n"
+            + "\t-s size       size of array to sort\n"
+            + "\t-n elements   elements to be displayed once sorted. Default: 100\n"
+            + "\t-c cores      number of cores for multithreading. Default: 1\n"
+            + "\t-p            enables parallel sorting\n";
 }
