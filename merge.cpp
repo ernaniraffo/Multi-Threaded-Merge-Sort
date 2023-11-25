@@ -128,7 +128,7 @@ void MergeSorter::ParallelMergeSort(std::vector<uint32_t> &A, uint32_t cores) {
     std::vector<std::pair<uint32_t, uint32_t>> indices;
     start_threads(A, cores, threads, indices);
     join_threads(threads);
-	threaded_merge_k_lists(A, cores, threads, indices);
+    threaded_merge_k_lists(A, cores, threads, indices);
     return;
 }
 
