@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
-#include <cinttypes>
+#include <cstdint>
 #include <random>
 
+extern std::random_device rd;
 extern std::mt19937 gen;
 extern std::uniform_int_distribution<unsigned long> distrib;
 

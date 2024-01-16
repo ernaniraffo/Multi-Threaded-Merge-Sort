@@ -1,4 +1,4 @@
-#include "merge.h"
+#include "MergeSorter.h"
 
 #include <iostream>
 #include <vector>
@@ -8,9 +8,6 @@
 #include <utility>
 
 #define INF (-1)
-
-std::mt19937 gen;
-std::uniform_int_distribution<unsigned long> distrib;
 
 void join_threads(std::vector<std::thread> &threads) {
     for (auto &t : threads) {
@@ -61,7 +58,7 @@ void threaded_merge_k_lists(std::vector<uint32_t> &A, uint32_t k, std::vector<st
 }
 
 void MergeSorter::RandomArray(std::vector<uint32_t> &A) {
-    gen.seed(std::mt19937::default_seed);
+    gen.seed(rd());
     for (uint32_t i = 0; i < A.size(); i += 1) {
         A[i] = distrib(gen);
     }
