@@ -1,6 +1,6 @@
 #pragma once
 
-#include "number_generator.h"
+#include "numgen.h"
 
 #include <vector>
 #include <cstdint>

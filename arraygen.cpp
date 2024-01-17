@@ -1,4 +1,4 @@
-#include "array_generator.h"
+#include "arraygen.h"
 
 ArrayGenerator::ArrayGenerator() {
     rng = NumberGenerator();

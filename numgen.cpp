@@ -1,4 +1,4 @@
-#include "number_generator.h"
+#include "numgen.h"
 
 #include <cstdint>
 #include <random>

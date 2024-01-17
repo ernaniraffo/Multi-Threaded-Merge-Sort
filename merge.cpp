@@ -1,4 +1,4 @@
-#include "merge_sorter.h"
+#include "merge.h"
 
 #include <iostream>
 #include <vector>

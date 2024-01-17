@@ -3,8 +3,8 @@ CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -fsanitize=address -pthread
 LFLAGS = 
 
 EXEC = sort
-OBJECTS = sort.o merge_sorter.o number_generator.o array_generator.o
-TEST_OBJECTS = test.o number_generator.o array_generator.o
+OBJECTS = sort.o merge.o numgen.o arraygen.o
+TEST_OBJECTS = test.o numgen.o arraygen.o
 
 all: clean sort
 

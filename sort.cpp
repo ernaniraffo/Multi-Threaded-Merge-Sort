@@ -1,5 +1,5 @@
-#include "merge_sorter.h"
-#include "array_generator.h"
+#include "merge.h"
+#include "arraygen.h"
 
 #include <iostream>
 #include <vector>
