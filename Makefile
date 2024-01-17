@@ -3,19 +3,25 @@ CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -fsanitize=address -pthread
 LFLAGS = 
 
 EXEC = sort
-OBJECTS = sort.o merge.o
+OBJECTS = sort.o merge_sorter.o number_generator.o array_generator.o
+TEST_OBJECTS = test.o number_generator.o array_generator.o
 
-$(EXEC): $(OBJECTS)
+all: clean sort
+
+sort: $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
+
+test: $(TEST_OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $<
 
 clean: tidy
-	rm -f $(EXEC)
+	rm -f sort test
 
 tidy:
-	rm -f $(OBJECTS)
+	rm -f *.o
 
 format:
 	clang-format -i -style=file *.cpp *.h
