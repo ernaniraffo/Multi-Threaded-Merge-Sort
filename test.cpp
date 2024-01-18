@@ -1,5 +1,5 @@
 #include "numgen.h"
-#include "numgen.h"
+#include "arraygen.h"
 
 #include <iostream>
 
