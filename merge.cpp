@@ -18,7 +18,10 @@ void start_threads(std::vector<uint32_t> &A, uint32_t cores, std::vector<std::th
     std::vector<std::pair<uint32_t, uint32_t>> &indices) {
     uint32_t elements_per_thread = A.size() / cores;
     uint32_t remainder = A.size() % cores;
+
+    // Need function pointer to overloaded method to start thread
     void (*pf)(std::vector<uint32_t> &, uint32_t, uint32_t) = MergeSorter::mergeSort;
+
     uint32_t lo, hi;
     lo = hi = 0;
     for (uint32_t t = 0; t < cores; t += 1) {
@@ -38,7 +41,7 @@ void threaded_merge_k_lists(std::vector<uint32_t> &A, uint32_t k, std::vector<st
     std::vector<std::pair<uint32_t, uint32_t>> &indices) {
     uint32_t lo, mid, hi;
     uint32_t step = 1;
-    
+
     while (step < k) {
         threads.clear();
         for (uint32_t i = 0; i < k - step; i += step * 2) {
