@@ -38,9 +38,7 @@ void threaded_merge_k_lists(std::vector<uint32_t> &A, uint32_t k, std::vector<st
     std::vector<std::pair<uint32_t, uint32_t>> &indices) {
     uint32_t lo, mid, hi;
     uint32_t step = 1;
-
-//    void (*pf2)(std::vector<uint32_t> &, uint32_t, uint32_t, uint32_t) = MergeSorter::merge;
-
+    
     while (step < k) {
         threads.clear();
         for (uint32_t i = 0; i < k - step; i += step * 2) {
