@@ -3,12 +3,12 @@
 #include <cstdint>
 #include <random>
 
-
 class NumberGenerator {
 public:
     NumberGenerator();
     NumberGenerator(uint32_t lo, uint32_t hi);
     uint32_t number();
+
 private:
     uint32_t lo;
     uint32_t hi;

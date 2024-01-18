@@ -24,28 +24,14 @@ int main(int argc, char **argv) {
     int opt;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-            case 'l':
-                lo = strtoul(optarg, nullptr, 10);
-                break;
-            case 'b':
-                hi = strtoul(optarg, nullptr, 10);
-                break;
-            case 's':
-                size = strtoul(optarg, nullptr, 10);
-                break;
-            case 'n':
-                n = strtoul(optarg, nullptr, 10);
-                break;
-            case 'c':
-                cores = strtoul(optarg, nullptr, 10);
-                break;
-            case 'p':
-                parallel = true;
-                break;
-            case 'h':
-            default:
-                std::cerr << usage();
-                return EXIT_FAILURE;
+        case 'l': lo = strtoul(optarg, nullptr, 10); break;
+        case 'b': hi = strtoul(optarg, nullptr, 10); break;
+        case 's': size = strtoul(optarg, nullptr, 10); break;
+        case 'n': n = strtoul(optarg, nullptr, 10); break;
+        case 'c': cores = strtoul(optarg, nullptr, 10); break;
+        case 'p': parallel = true; break;
+        case 'h':
+        default: std::cerr << usage(); return EXIT_FAILURE;
         }
     }
 
@@ -58,14 +44,15 @@ int main(int argc, char **argv) {
 
     auto sort = [&](bool parallel) {
         array_generator.arrayGen(A);
-    
+
         auto start = std::chrono::steady_clock::now();
         parallel ? MergeSorter::parallelMergeSort(A, cores) : MergeSorter::mergeSort(A);
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed_seconds = end - start;
 
         std::string type = parallel ? "Parallel Merge Sort" : "Merge Sort";
-        std::cout << type << ", " << A.size() << " elements, " << elapsed_seconds.count() << " seconds\n";
+        std::cout << type << ", " << A.size() << " elements, " << elapsed_seconds.count()
+                  << " seconds\n";
         MergeSorter::display(A, n);
     };
 
@@ -75,16 +62,13 @@ int main(int argc, char **argv) {
 }
 
 std::string usage() {
-    return std::string {} 
-            + "Synopsis\n" 
-            + "\tA Merge Sorter utilizing concurrency programming and random number generation.\n"
-            + "Usage\n" 
-            + "\t./sort [-l low] [-b high] [-s size] [-n elements] [-c cores] [-p]\n"
-            + "Options\n" 
-            + "\t-l low        lower bound for number generation. Default: 0\n"
-            + "\t-b high       higher bound for number generation. Default: UINT32_MAX\n"
-            + "\t-s size       size of array to sort\n"
-            + "\t-n elements   elements to be displayed once sorted. Default: 100\n"
-            + "\t-c cores      number of cores for multithreading. Default: 1\n"
-            + "\t-p            enables parallel sorting\n";
+    return std::string {} + "Synopsis\n"
+           + "\tA Merge Sorter utilizing concurrency programming and random number generation.\n"
+           + "Usage\n" + "\t./sort [-l low] [-b high] [-s size] [-n elements] [-c cores] [-p]\n"
+           + "Options\n" + "\t-l low        lower bound for number generation. Default: 0\n"
+           + "\t-b high       higher bound for number generation. Default: UINT32_MAX\n"
+           + "\t-s size       size of array to sort\n"
+           + "\t-n elements   elements to be displayed once sorted. Default: 100\n"
+           + "\t-c cores      number of cores for multithreading. Default: 1\n"
+           + "\t-p            enables parallel sorting\n";
 }
