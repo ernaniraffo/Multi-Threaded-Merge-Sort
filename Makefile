@@ -1,5 +1,6 @@
 CC = clang++
 CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Werror -fsanitize=address
+LFLAGS = -pthread
 
 EXEC = sort
 OBJECTS = sort.o merge.o numgen.o arraygen.o
@@ -8,13 +9,13 @@ TEST_OBJECTS = test.o numgen.o arraygen.o
 all: clean sort
 
 sort: $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 test: $(TEST_OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $< $(LFLAGS)
 
 clean: tidy
 	rm -f sort test
