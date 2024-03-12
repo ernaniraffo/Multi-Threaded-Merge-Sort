@@ -1,19 +1,19 @@
-#include "merge.h"
 #include "arraygen.h"
+#include "merge.h"
 
-#include <iostream>
-#include <vector>
-#include <getopt.h>
-#include <thread>
-#include <stdexcept>
 #include <algorithm>
 #include <cassert>
+#include <getopt.h>
+#include <iostream>
+#include <stdexcept>
+#include <thread>
+#include <vector>
 
 #define OPTIONS "l:b:s:n:c:ph"
 
 std::string usage();
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     uint32_t lo = 0;
     uint32_t hi = UINT32_MAX;
     uint32_t size = 100;
@@ -62,13 +62,13 @@ int main(int argc, char **argv) {
 }
 
 std::string usage() {
-    return std::string {} + "Synopsis\n"
-           + "\tA Merge Sorter utilizing concurrency programming and random number generation.\n"
-           + "Usage\n" + "\t./sort [-l low] [-b high] [-s size] [-n elements] [-c cores] [-p]\n"
-           + "Options\n" + "\t-l low        lower bound for number generation. Default: 0\n"
-           + "\t-b high       higher bound for number generation. Default: UINT32_MAX\n"
-           + "\t-s size       size of array to sort\n"
-           + "\t-n elements   elements to be displayed once sorted. Default: 100\n"
-           + "\t-c cores      number of cores for multithreading. Default: 1\n"
-           + "\t-p            enables parallel sorting\n";
+    return std::string{} + "Synopsis\n" +
+           "\tA Merge Sorter utilizing concurrency programming and random number generation.\n" +
+           "Usage\n" + "\t./sort [-l low] [-b high] [-s size] [-n elements] [-c cores] [-p]\n" +
+           "Options\n" + "\t-l low        lower bound for number generation. Default: 0\n" +
+           "\t-b high       higher bound for number generation. Default: UINT32_MAX\n" +
+           "\t-s size       size of array to sort\n" +
+           "\t-n elements   elements to be displayed once sorted. Default: 100\n" +
+           "\t-c cores      number of cores for multithreading. Default: 1\n" +
+           "\t-p            enables parallel sorting\n";
 }

@@ -4,12 +4,12 @@
 #include <random>
 
 class NumberGenerator {
-public:
+  public:
     NumberGenerator();
     NumberGenerator(uint32_t lo, uint32_t hi);
     uint32_t number();
 
-private:
+  private:
     uint32_t lo;
     uint32_t hi;
     std::mt19937 gen;

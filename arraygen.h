@@ -2,15 +2,15 @@
 
 #include "numgen.h"
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 class ArrayGenerator {
-public:
+  public:
     ArrayGenerator();
     ArrayGenerator(uint32_t lo, uint32_t hi);
-    void arrayGen(std::vector<uint32_t> &A);
+    void arrayGen(std::vector<uint32_t>& A);
 
-private:
+  private:
     NumberGenerator rng;
 };
